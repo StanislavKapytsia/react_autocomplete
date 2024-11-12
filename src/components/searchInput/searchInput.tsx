@@ -4,9 +4,10 @@ import { Person } from '../../types/Person';
 interface Props {
   delay: number;
   setFullField: React.Dispatch<React.SetStateAction<string>>;
-  setSelectedPerson: React.Dispatch<React.SetStateAction<'' | Person>>;
-  selectedPerson: '' | Person;
+  setSelectedPerson: React.Dispatch<React.SetStateAction<null | Person>>;
+  selectedPerson: null | Person;
   setFocus: React.Dispatch<React.SetStateAction<boolean>>;
+  setDelay?: React.Dispatch<React.SetStateAction<number>>;
 }
 
 export const SearchInput: React.FC<Props> = ({
@@ -18,16 +19,26 @@ export const SearchInput: React.FC<Props> = ({
 }) => {
   const [field, setField] = useState('');
 
-  const timerId = useRef(0);
+  const timerId = useRef<NodeJS.Timeout | number>(0);
+
+  const previousField = useRef('');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSelectedPerson('');
+    setSelectedPerson(null);
     setField(e.target.value);
 
-    window.clearTimeout(timerId.current);
+    if (timerId.current) {
+      window.clearTimeout(timerId.current as number);
+    }
 
     timerId.current = window.setTimeout(() => {
-      setFullField(e.target.value);
+      if (previousField.current !== e.target.value) {
+        const newField = e.target.value;
+
+        setFullField(newField.trim());
+
+        previousField.current = e.target.value;
+      }
     }, delay);
   };
 

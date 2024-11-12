@@ -3,16 +3,10 @@ import { Person } from '../../types/Person';
 
 interface Props {
   peopleFromServer: Person[];
-  setSelectedPerson: React.Dispatch<React.SetStateAction<'' | Person>>;
+  setSelectedPerson: React.Dispatch<React.SetStateAction<null | Person>>;
 }
 
 const Content: React.FC<Props> = ({ peopleFromServer, setSelectedPerson }) => {
-  const find = (person: Person | '') => {
-    if (person) {
-      setSelectedPerson(person);
-    }
-  };
-
   return (
     <div className="dropdown-content">
       {peopleFromServer.map(person => (
@@ -21,7 +15,7 @@ const Content: React.FC<Props> = ({ peopleFromServer, setSelectedPerson }) => {
           data-cy="suggestion-item"
           key={person.slug}
           onClick={() => {
-            find(person);
+            setSelectedPerson(person);
           }}
         >
           <p className="has-text-link">{person.name}</p>

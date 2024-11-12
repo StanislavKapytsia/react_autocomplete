@@ -9,10 +9,10 @@ import { SearchInput } from './components/searchInput/searchInput';
 import Content from './components/content/content';
 
 export const App: React.FC = () => {
-  const [delay] = useState(300); // for change add setDelay
+  const [delay, setDelay] = useState(300); // for change add setDelay
 
   const [fullField, setFullField] = useState('');
-  const [selectedPerson, setSelectedPerson] = useState<Person | ''>('');
+  const [selectedPerson, setSelectedPerson] = useState<Person | null>(null);
 
   const [focus, setFocus] = useState(false);
 
@@ -40,6 +40,7 @@ export const App: React.FC = () => {
             setSelectedPerson={setSelectedPerson}
             selectedPerson={selectedPerson}
             setFocus={setFocus}
+            setDelay={setDelay}
           />
 
           <div className="dropdown-menu" role="menu" data-cy="suggestions-list">
